@@ -6,10 +6,16 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 set(SOURCE
         ${SOURCE}
-        src/main.cpp)
+        src/main.cpp
+        src/color_operation.cpp
+        src/matrix_operation.cpp
+        src/brightness_operation.cpp)
 
 set(HEADERS
-        ${HEADERS})
+        ${HEADERS}
+        src/color_operation.hpp
+        src/matrix_operation.hpp
+        src/brightness_operation.hpp)
 
 add_executable(color_operations ${SOURCE})
 
