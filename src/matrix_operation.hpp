@@ -8,11 +8,11 @@ namespace color_operations {
 extern char const matrix_name[];
 
 struct MatrixParameters : ParameterBase {
-    double rr, rb, rg, br, bb, bg, gr, gb, gg;
+    cv::Mat matrix;
 
     MatrixParameters(
-            double rr, double rb, double rg, double br, double bb, double bg, double gr, double gb, double gg) :
-                    rr(rr), rb(rb), rg(rg), br(br), bb(bb), bg(bg), gr(gr), gb(gb), gg(gg) {}
+            double rr, double rg, double rb, double gr, double gg, double gb, double br, double bg, double bb) :
+                    matrix((cv::Mat_<double>(3, 3) << rr, rg, rb, gr, gg, gb, br, bg, bb)) {}
 };
 
 class MatrixOperation : public ColorOperation<MatrixParameters, matrix_name> {
