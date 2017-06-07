@@ -5,9 +5,19 @@
 
 namespace color_operations {
 
-class MatrixOperation : public ColorOperation {
+extern char const matrix_name[];
+
+struct MatrixParameters : ParameterBase {
+    double rr, rb, rg, br, bb, bg, gr, gb, gg;
+
+    MatrixParameters(
+            double rr, double rb, double rg, double br, double bb, double bg, double gr, double gb, double gg) :
+                    rr(rr), rb(rb), rg(rg), br(br), bb(bb), bg(bg), gr(gr), gb(gb), gg(gg) {}
+};
+
+class MatrixOperation : public ColorOperation<MatrixParameters, matrix_name> {
 public:
-    static const std::string name;
+    void apply(const MatrixParameters &parameters, cv::Mat &image) override;
 };
 
 }

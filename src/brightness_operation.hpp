@@ -5,9 +5,17 @@
 
 namespace color_operations {
 
-class BrightnessOperation : public ColorOperation {
+extern char const brightness_name[];
+
+struct BrightnessParameters : ParameterBase {
+    double brightness;
+
+    BrightnessParameters(double brightness) : brightness(brightness) {}
+};
+
+class BrightnessOperation : public ColorOperation<BrightnessParameters, brightness_name> {
 public:
-    static const std::string name;
+    void apply(const BrightnessParameters &parameters, cv::Mat &image) override;
 };
 
 }
