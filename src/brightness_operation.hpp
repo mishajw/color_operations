@@ -7,24 +7,19 @@
 
 namespace color_operations {
 
-extern char const brightness_name[];
+struct BrightnessCliCreator : OperationCliCreator {
+    void add_cli_arguments(boost::program_options::options_description &description) override;
 
-struct BrightnessParameters : ParameterBase {
-    double brightness;
-
-    BrightnessParameters(double brightness) : brightness(brightness) {}
+    std::shared_ptr<ColorOperation> parse_arguments(const boost::program_options::variables_map &arguments) override;
 };
 
-struct BrightnessParametersParser {
-    static void add_cli_arguments(boost::program_options::options_description &description);
-
-    static boost::optional<const BrightnessParameters> parse_arguments(
-            const boost::program_options::variables_map &arguments);
-};
-
-class BrightnessOperation : public ColorOperation<BrightnessParameters, BrightnessParametersParser, brightness_name> {
+class BrightnessOperation : public ColorOperation {
 public:
-    void apply(const BrightnessParameters &parameters, cv::Mat &image) override;
+    BrightnessOperation(double brightness);
+
+    const double brightness;
+
+    void apply(cv::Mat &image) override;
 };
 
 }

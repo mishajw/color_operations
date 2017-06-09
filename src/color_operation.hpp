@@ -9,24 +9,19 @@
 
 namespace color_operations {
 
-struct ParameterBase {};
-
-template <typename ParameterType, typename ParametersParser, char const *_name>
 class ColorOperation {
 public:
-    constexpr static char const *name = _name;
+    ColorOperation(const std::string name) : name(name) {}
 
-    typedef ParametersParser parameters_parser;
+    const std::string name;
 
-    virtual void apply(const ParameterType &parameters, cv::Mat &image) = 0;
+    virtual void apply(cv::Mat &image) = 0;
+};
 
-    void add_cli_arguments(boost::program_options::options_description &description) {
-        ParametersParser::add_cli_arguments(description);
-    }
+struct OperationCliCreator {
+    virtual void add_cli_arguments(boost::program_options::options_description &description) = 0;
 
-    boost::optional<const ParameterType> parse_arguments(const boost::program_options::variables_map &arguments) {
-        return ParametersParser::parse_arguments(arguments);
-    }
+    virtual std::shared_ptr<ColorOperation> parse_arguments(const boost::program_options::variables_map &arguments) = 0;
 };
 
 }
