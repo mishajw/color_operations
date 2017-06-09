@@ -19,11 +19,11 @@ void MatrixOperation::apply(cv::Mat &image) {
     }
 }
 
-void MatrixCliCreator::add_cli_arguments(boost::program_options::options_description &description) {
+void MatrixProgramOptionsCreator::add_program_options(boost::program_options::options_description &description) {
 
 }
 
-std::shared_ptr<ColorOperation> MatrixCliCreator::parse_arguments(
+std::shared_ptr<Operation> MatrixProgramOptionsCreator::parse_arguments(
         const boost::program_options::variables_map &arguments) {
 
     return nullptr;
