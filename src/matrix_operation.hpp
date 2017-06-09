@@ -15,9 +15,7 @@ struct MatrixProgramOptionsCreator : OperationProgramOptionsCreator {
 
 class MatrixOperation : public Operation {
 public:
-    MatrixOperation(
-            double rr, double rg, double rb, double gr, double gg, double gb, double br, double bg, double bb) :
-                    Operation("matrix"), matrix((cv::Mat_<double>(3, 3) << rr, rg, rb, gr, gg, gb, br, bg, bb)) {}
+    MatrixOperation(cv::Mat matrix);
 
     cv::Mat matrix;
 
