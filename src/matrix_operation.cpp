@@ -21,4 +21,14 @@ void MatrixOperation::apply(const MatrixParameters &parameters, cv::Mat &image) 
     }
 }
 
+void MatrixParametersParser::add_cli_arguments(boost::program_options::options_description &description) {
+
+}
+
+boost::optional<const MatrixParameters> MatrixParametersParser::parse_arguments(
+        const boost::program_options::variables_map &arguments) {
+
+    return boost::optional<const MatrixParameters>();
+}
+
 }

@@ -3,7 +3,7 @@ set (CMAKE_CXX_STANDARD 14)
 project(color_operations)
 
 find_package(OpenCV 3.2 REQUIRED)
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Boost COMPONENTS system filesystem program_options REQUIRED)
 
 set(SOURCE
         ${SOURCE}
