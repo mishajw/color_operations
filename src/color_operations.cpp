@@ -3,12 +3,14 @@
 #include "color_operations.hpp"
 #include "brightness_operation.hpp"
 #include "matrix_operation.hpp"
+#include "random_operation.hpp"
 
 namespace color_operations {
 
 const std::vector<std::shared_ptr<OperationProgramOptionsCreator>> operation_creators = {
         std::make_shared<BrightnessProgramOptionsCreator>(),
-        std::make_shared<MatrixProgramOptionsCreator>()
+        std::make_shared<MatrixProgramOptionsCreator>(),
+        std::make_shared<RandomProgramOptionsCreator>()
 };
 
 void add_operations_program_options(boost::program_options::options_description &options_description) {

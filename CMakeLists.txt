@@ -11,6 +11,7 @@ set(SOURCE
         src/operation.cpp
         src/matrix_operation.cpp
         src/brightness_operation.cpp
+        src/random_operation.cpp
         src/color_operations.cpp)
 
 set(HEADERS
@@ -18,6 +19,7 @@ set(HEADERS
         src/operation.hpp
         src/matrix_operation.hpp
         src/brightness_operation.hpp
+        src/random_operation.hpp
         src/color_operations.hpp)
 
 add_executable(color_operations ${SOURCE})
