@@ -10,13 +10,15 @@ set(SOURCE
         src/main.cpp
         src/operation.cpp
         src/matrix_operation.cpp
-        src/brightness_operation.cpp)
+        src/brightness_operation.cpp
+        src/color_operations.cpp)
 
 set(HEADERS
         ${HEADERS}
         src/operation.hpp
         src/matrix_operation.hpp
-        src/brightness_operation.hpp)
+        src/brightness_operation.hpp
+        src/color_operations.hpp)
 
 add_executable(color_operations ${SOURCE})
 
