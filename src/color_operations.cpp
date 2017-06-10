@@ -20,10 +20,8 @@ void add_operations_program_options(boost::program_options::options_description 
             });
 }
 
-void apply_with_program_options(
-        std::string input_file, std::string output_file, boost::program_options::variables_map variables_map) {
-
-    std::cout << "Processing image " << input_file << " and writing to " << output_file << std::endl;
+std::vector<std::shared_ptr<Operation>> get_operations_from_program_options(
+        const boost::program_options::variables_map &variables_map) {
 
     // Get operations from program options
     std::vector<std::shared_ptr<Operation>> operations;
@@ -44,20 +42,27 @@ void apply_with_program_options(
                     [](std::shared_ptr<Operation> operation) { return !operation; }),
             operations.end());
 
-    apply(input_file, output_file, operations);
+    return operations;
 }
 
-void apply(std::string input_file, std::string output_file, std::vector<std::shared_ptr<Operation>> operations) {
+void apply(
+        const std::string &input_file,
+        const std::string &output_file,
+        const std::vector<std::shared_ptr<Operation>> &operations) {
+
     // Read image from file
     cv::Mat image = cv::imread(input_file);
 
-    // Apply operations to image
-    std::for_each(operations.begin(), operations.end(), [&image](std::shared_ptr<Operation> operation) {
-        operation->apply(image);
-    });
+    apply(image, operations);
 
     // Save the final image
     cv::imwrite(output_file, image);
+}
+
+void apply(cv::Mat &image, const std::vector<std::shared_ptr<Operation>> &operations) {
+    for (const auto &operation : operations) {
+        operation->apply(image);
+    }
 }
 
 }

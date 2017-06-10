@@ -52,7 +52,8 @@ int main(int argc, const char **argv) {
         const std::string input_file = variables_map["input_file"].as<std::string>();
         const std::string output_file = variables_map["output_file"].as<std::string>();
 
-        color_operations::apply_with_program_options(input_file, output_file, variables_map);
+        auto operations = color_operations::get_operations_from_program_options(variables_map);
+        color_operations::apply(input_file, output_file, operations);
     } else if (variables_map.count("input_directory") && variables_map.count("output_directory")) {
         const std::string input_directory = variables_map["input_directory"].as<std::string>();
         const std::string output_directory = variables_map["output_directory"].as<std::string>();
@@ -68,7 +69,8 @@ int main(int argc, const char **argv) {
             const boost::filesystem::path input_file(directory_iter->path());
             const boost::filesystem::path output_file = output_directory / input_file.filename();
 
-            color_operations::apply_with_program_options(input_file.string(), output_file.string(), variables_map);
+            auto operations = color_operations::get_operations_from_program_options(variables_map);
+            color_operations::apply(input_file.string(), output_file.string(), operations);
         }
     } else {
         std::cerr <<
