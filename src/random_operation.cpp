@@ -8,7 +8,7 @@ namespace color_operations {
 RandomOperation::RandomOperation(bool brightness, bool matrix) :
         Operation("random"), brightness(brightness), matrix(matrix), random_generator(std::random_device()()) {}
 
-void RandomOperation::apply(cv::Mat &image) {
+void RandomOperation::apply(cv::Mat &image, const std::string &image_name) {
     boost::program_options::variables_map variables_map;
 
     if (this->brightness) {
@@ -20,7 +20,7 @@ void RandomOperation::apply(cv::Mat &image) {
     }
 
     auto operations = color_operations::get_operations_from_program_options(variables_map);
-    color_operations::apply(image, operations);
+    color_operations::apply(image, operations, image_name);
 }
 
 void RandomOperation::add_random_brightness_options(boost::program_options::variables_map &variables_map) {

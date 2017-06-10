@@ -15,7 +15,7 @@ public:
 
     const std::string name;
 
-    virtual void apply(cv::Mat &image) = 0;
+    virtual void apply(cv::Mat &image, const std::string &image_name) = 0;
 };
 
 struct OperationProgramOptionsCreator {

@@ -8,7 +8,7 @@ MatrixOperation::MatrixOperation(cv::Mat matrix) : Operation("matrix"), matrix(m
     assert(matrix.cols == 3 && matrix.rows == 3);
 }
 
-void MatrixOperation::apply(cv::Mat &image) {
+void MatrixOperation::apply(cv::Mat &image, const std::string &image_name) {
     for (auto iter = image.begin<cv::Vec3b>(); iter != image.end<cv::Vec3b>(); ++iter) {
         double current_pixel_double_data[] = {
                 static_cast<double>((*iter)[0]),

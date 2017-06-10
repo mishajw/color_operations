@@ -22,7 +22,7 @@ public:
 
     RandomOperation(bool brightness, bool matrix);
 
-    void apply(cv::Mat &image) override;
+    void apply(cv::Mat &image, const std::string &image_name) override;
 
 private:
     void add_random_brightness_options(boost::program_options::variables_map &variables_map);

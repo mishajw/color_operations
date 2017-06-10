@@ -19,7 +19,7 @@ public:
 
     cv::Mat matrix;
 
-    void apply(cv::Mat &image) override;
+    void apply(cv::Mat &image, const std::string &image_name) override;
 };
 
 }

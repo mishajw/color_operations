@@ -4,7 +4,7 @@ namespace color_operations {
 
 BrightnessOperation::BrightnessOperation(double brightness) : Operation("brightness"), brightness(brightness) {}
 
-void BrightnessOperation::apply(cv::Mat &image) {
+void BrightnessOperation::apply(cv::Mat &image, const std::string &image_name) {
     for (auto iter = image.begin<cv::Vec3b>(); iter != image.end<cv::Vec3b>(); ++iter) {
         *iter *= this->brightness;
     }

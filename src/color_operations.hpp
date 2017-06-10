@@ -16,7 +16,7 @@ void apply(
         const std::string &output_file,
         const std::vector<std::shared_ptr<Operation>> &operations);
 
-void apply(cv::Mat &image, const std::vector<std::shared_ptr<Operation>> &operations);
+void apply(cv::Mat &image, const std::vector<std::shared_ptr<Operation>> &operations, const std::string &image_name);
 
 }
 
