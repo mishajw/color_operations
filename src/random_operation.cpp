@@ -60,7 +60,15 @@ void RandomOperation::add_random_matrix_options(boost::program_options::variable
 
 void RandomProgramOptionsCreator::add_program_options(boost::program_options::options_description &description) {
     description.add_options()
-            ("random", "Randomly apply operations to image(s)");
+            ("random", "Randomly apply operations to image(s)")
+            (
+                    "random.brightness",
+                    boost::program_options::value<bool>()->default_value(true),
+                    "Randomly apply brightness operation")
+            (
+                    "random.matrix",
+                    boost::program_options::value<bool>()->default_value(true),
+                    "Randomly apply matrix operation");
 }
 
 std::shared_ptr<Operation> RandomProgramOptionsCreator::parse_arguments(
@@ -70,8 +78,10 @@ std::shared_ptr<Operation> RandomProgramOptionsCreator::parse_arguments(
         return std::shared_ptr<Operation>();
     }
 
-    // TODO: Add options for brightness and matrix
-    return std::make_shared<RandomOperation>(true, true);
+    bool brightness = arguments["random.brightness"].as<bool>();
+    bool matrix = arguments["random.matrix"].as<bool>();
+
+    return std::make_shared<RandomOperation>(brightness, matrix);
 }
 
 }
