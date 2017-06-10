@@ -1,4 +1,5 @@
 #include <opencv2/imgcodecs.hpp>
+#include <iostream>
 #include "color_operations.hpp"
 #include "brightness_operation.hpp"
 #include "matrix_operation.hpp"
@@ -20,7 +21,9 @@ void add_operations_program_options(boost::program_options::options_description 
 }
 
 void apply_with_program_options(
-        std::string input_path, std::string output_path, boost::program_options::variables_map variables_map) {
+        std::string input_file, std::string output_file, boost::program_options::variables_map variables_map) {
+
+    std::cout << "Processing image " << input_file << " and writing to " << output_file << std::endl;
 
     // Get operations from program options
     std::vector<std::shared_ptr<Operation>> operations;
@@ -41,12 +44,12 @@ void apply_with_program_options(
                     [](std::shared_ptr<Operation> operation) { return !operation; }),
             operations.end());
 
-    apply(input_path, output_path, operations);
+    apply(input_file, output_file, operations);
 }
 
-void apply(std::string input_path, std::string output_path, std::vector<std::shared_ptr<Operation>> operations) {
+void apply(std::string input_file, std::string output_file, std::vector<std::shared_ptr<Operation>> operations) {
     // Read image from file
-    cv::Mat image = cv::imread(input_path);
+    cv::Mat image = cv::imread(input_file);
 
     // Apply operations to image
     std::for_each(operations.begin(), operations.end(), [&image](std::shared_ptr<Operation> operation) {
@@ -54,7 +57,7 @@ void apply(std::string input_path, std::string output_path, std::vector<std::sha
     });
 
     // Save the final image
-    cv::imwrite(output_path, image);
+    cv::imwrite(output_file, image);
 }
 
 }
