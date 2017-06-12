@@ -1,3 +1,4 @@
+#include <fstream>
 #include "color_operations.hpp"
 #include "random_operation.hpp"
 #include "brightness_operation.hpp"
@@ -6,7 +7,18 @@
 namespace color_operations {
 
 RandomOperation::RandomOperation(bool brightness, bool matrix) :
-        Operation("random"), brightness(brightness), matrix(matrix), random_generator(std::random_device()()) {}
+        RandomOperation(brightness, matrix, boost::optional<std::string>()) {}
+
+RandomOperation::RandomOperation(bool brightness, bool matrix, const std::string &random_variables_path) :
+        RandomOperation(brightness, matrix, boost::optional<std::string>(random_variables_path)) {}
+
+RandomOperation::RandomOperation(
+        bool brightness, bool matrix, const boost::optional<std::string> &random_variables_path_opt) :
+            Operation("random"),
+            brightness(brightness),
+            matrix(matrix),
+            random_variables_path_opt(random_variables_path_opt),
+            random_generator(std::random_device()()) {}
 
 void RandomOperation::apply(cv::Mat &image, const std::string &image_name) {
     boost::program_options::variables_map variables_map;
@@ -17,6 +29,10 @@ void RandomOperation::apply(cv::Mat &image, const std::string &image_name) {
 
     if (this->matrix) {
         add_random_matrix_options(variables_map);
+    }
+
+    if (this->random_variables_path_opt) {
+        write_variables_map(variables_map, this->random_variables_path_opt.get(), image_name);
     }
 
     auto operations = color_operations::get_operations_from_program_options(variables_map);
@@ -58,6 +74,34 @@ void RandomOperation::add_random_matrix_options(boost::program_options::variable
             std::make_pair("matrix.blue", boost::program_options::variable_value(ss_blue.str(), false)));
 }
 
+void RandomOperation::write_variables_map(
+        const boost::program_options::variables_map &variables_map,
+        const std::string &random_variables_path,
+        const std::string &image_name) {
+
+    std::stringstream output;
+    output << image_name << ": ";
+
+    for (const auto &kv : variables_map) {
+        output << kv.first << " ";
+
+        if (typeid(double) == kv.second.value().type()) {
+            output << kv.second.as<double>();
+        } else if (typeid(int) == kv.second.value().type()) {
+            output << kv.second.as<int>();
+        } else if (typeid(std::string) == kv.second.value().type()) {
+            output << kv.second.as<std::string>();
+        }
+
+        output << "; ";
+    }
+
+    output << "\n";
+
+    std::ofstream output_stream(random_variables_path, std::ios::app | std::ios::out);
+    output_stream << output.str();
+}
+
 void RandomProgramOptionsCreator::add_program_options(boost::program_options::options_description &description) {
     description.add_options()
             ("random", "Randomly apply operations to image(s)")
@@ -68,7 +112,11 @@ void RandomProgramOptionsCreator::add_program_options(boost::program_options::op
             (
                     "random.matrix",
                     boost::program_options::value<bool>()->default_value(true),
-                    "Randomly apply matrix operation");
+                    "Randomly apply matrix operation")
+            (
+                    "random.write_variables",
+                    boost::program_options::value<std::string>(),
+                    "Where to write out random variables");
 }
 
 std::shared_ptr<Operation> RandomProgramOptionsCreator::parse_arguments(
@@ -81,7 +129,13 @@ std::shared_ptr<Operation> RandomProgramOptionsCreator::parse_arguments(
     bool brightness = arguments["random.brightness"].as<bool>();
     bool matrix = arguments["random.matrix"].as<bool>();
 
-    return std::make_shared<RandomOperation>(brightness, matrix);
+    if (arguments.count("random.write_variables")) {
+        const std::string &random_variables_path = arguments["random.write_variables"].as<std::string>();
+
+        return std::make_shared<RandomOperation>(brightness, matrix, random_variables_path);
+    } else {
+        return std::make_shared<RandomOperation>(brightness, matrix);
+    }
 }
 
 }
