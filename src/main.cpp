@@ -69,6 +69,10 @@ int main(int argc, const char **argv) {
             const boost::filesystem::path input_file(directory_iter->path());
             const boost::filesystem::path output_file = output_directory / input_file.filename();
 
+            if (!boost::filesystem::is_regular_file(input_file)) {
+                continue;
+            }
+
             auto operations = color_operations::get_operations_from_program_options(variables_map);
             color_operations::apply(input_file.string(), output_file.string(), operations);
         }

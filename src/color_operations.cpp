@@ -1,6 +1,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
 #include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 #include "color_operations.hpp"
 #include "brightness_operation.hpp"
 #include "matrix_operation.hpp"
@@ -53,14 +54,26 @@ void apply(
         const std::string &output_file,
         const std::vector<std::shared_ptr<Operation>> &operations) {
 
+    cv::Mat image;
+
     // Read image from file
-    cv::Mat image = cv::imread(input_file);
+    try {
+        image = cv::imread(input_file);
+    } catch (const cv::Exception &e) {
+        std::cerr << "Can't open file " << input_file << ": " << e.what() << std::endl;
+        return;
+    }
 
     const std::string image_name = boost::filesystem::path(input_file).filename().string();
     apply(image, operations, image_name);
 
     // Save the final image
-    cv::imwrite(output_file, image);
+    try {
+        boost::filesystem::create_directories(boost::filesystem::path(output_file).parent_path());
+        cv::imwrite(output_file, image);
+    } catch (const cv::Exception &e) {
+        std::cerr << "Can't write to file " << output_file << ": " << e.what() << std::endl;
+    }
 }
 
 void apply(cv::Mat &image, const std::vector<std::shared_ptr<Operation>> &operations, const std::string &image_name) {
