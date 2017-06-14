@@ -1,4 +1,5 @@
 #include <fstream>
+#include <boost/filesystem.hpp>
 #include "color_operations.hpp"
 #include "random_operation.hpp"
 #include "brightness_operation.hpp"
@@ -98,6 +99,7 @@ void RandomOperation::write_variables_map(
 
     output << "\n";
 
+    boost::filesystem::create_directories(boost::filesystem::path(random_variables_path).parent_path());
     std::ofstream output_stream(random_variables_path, std::ios::app | std::ios::out);
     output_stream << output.str();
 }
